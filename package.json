@@ -1,21 +1,19 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "makecode-microbit-app",
+  "version": "0.1.0",
+  "description": "https://makecode.microbit.org wrapper app",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/switch-education/microbit-makecode-app",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "micro:bit",
+    "makecode",
+    "Electron"
   ],
   "author": "GitHub",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.7.8"
   },
