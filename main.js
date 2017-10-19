@@ -5,11 +5,25 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
-const url = require('url')
+const fs = require('fs-extra')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+const targetVolumeNames = [
+  'MBED',
+  'MICROBIT',
+]
+
 let mainWindow
+
+function findMicrobitVolume() {
+  let prefix = "/Volumes/"
+  let volumes = fs.readdirSync(prefix)
+  for (let i = 0; i < volumes.length; ++i) {
+    let volume = volumes[i]
+    if (targetVolumeNames.indexOf(volume) >= 0) {
+      return `${prefix}${volume}/`
+    }
+  }
+}
 
 function createWindow () {
   // Create the browser window.
@@ -23,6 +37,20 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+  })
+
+  mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    item.once('done', (event, state) => {
+      if (state === 'completed') {
+        let savedPath = item.getSavePath()
+        let writePath = path.join(findMicrobitVolume(), item.getFilename())
+        console.log(`Copy: ${savedPath} -> ${writePath}`);
+
+        fs.copy(savedPath, writePath, (err) => {
+          if (err) throw err;
+        })
+      }
+    })
   })
 }
 
